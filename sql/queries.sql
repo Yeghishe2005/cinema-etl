@@ -1,5 +1,3 @@
--- --- YOUR REQUESTED PROBLEMS ---
-
 -- Problem 1: Top 3 Favorite Genres per Age Group
 SELECT age_group, favorite_genre, count
 FROM (
@@ -80,3 +78,18 @@ SELECT
     AVG(completion_rate) as avg_completion 
 FROM netflix_users 
 GROUP BY primary_device;
+
+-- Recommendation for the first 100 users based on favorite genre
+SELECT 
+    u.user_id, 
+    u.favorite_genre, 
+    a.name AS recommended_anime, 
+    a.rating
+FROM (
+    SELECT user_id, favorite_genre 
+    FROM netflix_users 
+    LIMIT 100
+) AS u
+JOIN anime a ON a.genre LIKE '%' || u.favorite_genre || '%'
+GROUP BY u.user_id
+ORDER BY a.rating DESC;
